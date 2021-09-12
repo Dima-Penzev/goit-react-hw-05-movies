@@ -21,3 +21,15 @@ export function fetchPopularMovies() {
 export function fetchMovieById(id) {
   return fetchMovies(`/movie/${id}?api_key=${apiKey}`);
 }
+
+export function fetchCastById(id) {
+  return fetchMovies(`/movie/${id}/credits?api_key=${apiKey}`);
+}
+
+export function fetchReviewsById(id) {
+  return fetchMovies(`/movie/${id}/reviews?api_key=${apiKey}`);
+}
+
+export function fetchMoviebyQuery(query) {
+  return fetchMovies(`/search/movie/?api_key=${apiKey}&query=${query}`);
+}

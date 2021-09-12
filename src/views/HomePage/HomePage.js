@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { fetchPopularMovies } from "../../services/MoviesApi";
 
 function HomePage() {
-  //   const route = useRouteMatch();
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
