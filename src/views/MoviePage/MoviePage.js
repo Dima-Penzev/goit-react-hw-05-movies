@@ -1,45 +1,39 @@
-// import { useState } from "react";
-// import { Link, useParams, Switch, Route } from "react-router-dom";
-// import { fetchMoviebyQuery } from "../../services/MoviesApi";
+import { useState, useEffect } from "react";
+import { useHistory, useLocation } from "react-router-dom";
+import { fetchMoviebyQuery } from "../../services/MoviesApi";
 
 function MoviePage() {
-  // const [movieSearch, setMovieSearch] = useState("");
-
-  // useEffect(() => {
-  //   if (!movieSearch) {
-  //     return;
-  //   }
-  //   fetchMoviebyQuery(movieSearch).then((response) => setMovieSearch(response));
-  // }, [movieSearch]);
+  const history = useHistory();
+  const location = useLocation();
+  const [movieQuery, setMovieQuery] = useState("");
+  const [movieFound, setMovieFound] = useState(null);
+  console.log(history);
+  console.log(location);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const movie = e.target.elements.query.value;
-    console.log(movie);
 
-    // if (movieSearch.trim() === "") {
-    //   alert("Введите запрос в строку для поиска");
-    //   return;
-    // }
-    // // onSubmit(movieSearch);
-    // setMovieSearch("");
+    const movie = e.currentTarget.query.value;
+    const movieLow = movie.toLowerCase().trim();
+    setMovieQuery(movieLow);
   };
 
-  // console.log(movieSearch);
+  useEffect(() => {
+    if (!movieQuery) {
+      return;
+    }
+    fetchMoviebyQuery(movieQuery).then((response) =>
+      setMovieFound(response.data.results)
+    );
+    setMovieQuery("");
+  }, [movieQuery]);
+
+  console.log(movieFound);
 
   return (
     <div>
-      <h1>Movie Search</h1>
-
       <form onSubmit={handleSubmit}>
-        <input
-          name="query"
-          type="text"
-          placeholder="Search movies"
-          // onChange={(e) => {
-          //   setMovieSearch(e.currentTarget.value.toLowerCase());
-          // }}
-        />
+        <input name="query" type="text" placeholder="Search movies" />
 
         <button type="submit">
           <span>Search</span>
