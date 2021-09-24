@@ -12,22 +12,20 @@ function Reviews() {
     );
   }, [movieId]);
 
-  return (
+  return reviews.length > 0 ? (
     <ul>
-      {reviews.length > 0 ? (
-        reviews.map((review) => (
-          <li key={review.id}>
-            <h4>
-              <span>Author:</span>
-              {review.author}
-            </h4>
-            <p>{review.content}</p>
-          </li>
-        ))
-      ) : (
-        <p>We don't have any reviews for this movie</p>
-      )}
+      {reviews.map((review) => (
+        <li key={review.id}>
+          <h4>
+            <span>Author:</span>
+            {review.author}
+          </h4>
+          <p>{review.content}</p>
+        </li>
+      ))}
     </ul>
+  ) : (
+    <p>We don't have any reviews for this movie</p>
   );
 }
 

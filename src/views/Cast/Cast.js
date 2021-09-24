@@ -6,18 +6,17 @@ import defaultImg from "./defaultAvatar.jpg";
 const IMG_URL = "https://image.tmdb.org/t/p/w500/";
 
 function Cast() {
-  const [cast, setCast] = useState(null);
+  const [cast, setCast] = useState([]);
   const { movieId } = useParams();
-
   useEffect(() => {
     fetchCastById(movieId).then((response) => setCast(response.data.cast));
   }, [movieId]);
 
   return (
     <div>
-      <ul>
-        {cast &&
-          cast.map((actor) => (
+      {cast.length > 0 ? (
+        <ul>
+          {cast.map((actor) => (
             <li key={actor.id}>
               <img
                 src={
@@ -35,7 +34,10 @@ function Cast() {
               </p>
             </li>
           ))}
-      </ul>
+        </ul>
+      ) : (
+        <p>We don't have any casts for this movie</p>
+      )}
     </div>
   );
 }
