@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import {
   Link,
   useParams,
@@ -8,10 +8,15 @@ import {
   useLocation,
 } from "react-router-dom";
 import { fetchMovieById } from "../../services/MoviesApi";
-import Cast from "../Cast/Cast";
-import Reviews from "../Reviews/Reviews";
 import defaultFilm from "../MovieDetailsPage/defaultFilm.jpg";
-
+import Spiner from "../../components/Loader/Loader";
+import s from "./MovieDetailsPage.module.css";
+const Cast = lazy(() =>
+  import("../Cast/Cast.js" /* webpackChunkName: "cast" */)
+);
+const Reviews = lazy(() =>
+  import("../Reviews/Reviews.js" /* webpackChunkName: "reviews" */)
+);
 const IMG_URL = "https://image.tmdb.org/t/p/w500/";
 
 function MovieDetailsPage() {
@@ -31,68 +36,80 @@ function MovieDetailsPage() {
     }
     history.push(location?.state?.from ?? "/");
   };
-  console.log(location?.state?.from?.state?.from);
-  console.log(location?.state?.from?.pathname);
+
   return (
     <div>
       {movie && (
         <div>
-          <button type="button" onClick={onGoBack}>
+          <button className={s.button} type="button" onClick={onGoBack}>
             Go back
           </button>
-          <br />
-          <img
-            src={
-              movie.poster_path ? `${IMG_URL}${movie.poster_path}` : defaultFilm
-            }
-            alt={movie.title}
-            width="300"
-          />
-          <h2>{movie.title}</h2>
-          <p>
-            <span>User score:</span>
-            <span> </span>
-            {movie.vote_count}
-          </p>
-          <h3>Overview</h3>
-          <p>{movie.overview}</p>
-          <h3>Genres</h3>
-          <ul>
-            {movie.genres.map(({ id, name }) => (
-              <li key={id}>{name}</li>
-            ))}
-          </ul>
+          <div className={s.container}>
+            <img
+              src={
+                movie.poster_path
+                  ? `${IMG_URL}${movie.poster_path}`
+                  : defaultFilm
+              }
+              alt={movie.title}
+              width="300"
+            />
+            <div className={s.discription}>
+              <h2>{movie.title}</h2>
+              <p>
+                <span>User score:</span>
+                <span> </span>
+                {movie.vote_count}
+              </p>
+              <h3>Overview</h3>
+              <p>{movie.overview}</p>
+              <h3>Genres</h3>
+              <ul>
+                {movie.genres.map(({ id, name }) => (
+                  <li key={id}>{name}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       )}
-      <div>
-        <h3>Additional information</h3>
-        <Link
-          to={{
-            pathname: `/movies/${movieId}/cast`,
-            state: { from: location },
-          }}
-        >
-          Cast
-        </Link>
-        <Link
-          to={{
-            pathname: `/movies/${movieId}/reviews`,
-            state: { from: location },
-          }}
-        >
-          Rewiews
-        </Link>
+      <div className={s.infoContainer}>
+        <h3 className={s.title}>Additional information</h3>
+        <ul>
+          <li>
+            <Link
+              to={{
+                pathname: `/movies/${movieId}/cast`,
+                state: { from: location },
+              }}
+            >
+              Cast
+            </Link>
+          </li>
+          <li>
+            <Link
+              to={{
+                pathname: `/movies/${movieId}/reviews`,
+                state: { from: location },
+              }}
+            >
+              Rewiews
+            </Link>
+          </li>
+        </ul>
       </div>
 
-      <Switch>
-        <Route path="/movies/:movieId/cast">
-          <Cast />
-        </Route>
+      <Suspense fallback={<Spiner />}>
+        <Switch>
+          <Route path="/movies/:movieId/cast">
+            <Cast />
+          </Route>
 
-        <Route path="/movies/:movieId/reviews">
-          <Reviews />
-        </Route>
-      </Switch>
+          <Route path="/movies/:movieId/reviews">
+            <Reviews />
+          </Route>
+        </Switch>
+      </Suspense>
     </div>
   );
 }

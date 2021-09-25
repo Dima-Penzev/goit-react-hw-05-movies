@@ -1,0 +1,23 @@
+.navigation {
+  border-bottom: 1px solid #00bfff;
+  padding: 20px;
+}
+
+.navItem {
+  border: 1px solid #00bfff;
+  border-radius: 3px;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-decoration: none;
+  color: #00bfff;
+}
+
+.navItem + .navItem {
+  margin-left: 30px;
+}
+
+.active {
+  background-color: #00bfff;
+  color: #fff;
+}

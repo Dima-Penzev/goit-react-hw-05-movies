@@ -1,0 +1,25 @@
+.container {
+  text-align: center;
+  padding-top: 30px;
+}
+
+.input {
+  border: 2px solid #00bfff;
+  border-radius: 3px;
+  height: 20px;
+  width: 200px;
+  margin-right: 15px;
+}
+
+.button {
+  border: 1px solid #00bfff;
+  border-radius: 3px;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #00bfff;
+}
+
+.notFound {
+  text-align: center;
+}

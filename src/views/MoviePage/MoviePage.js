@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Link, useHistory, useLocation, useRouteMatch } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { fetchMoviebyQuery } from "../../services/MoviesApi";
 import Spiner from "../../components/Loader/Loader";
+import FilmsList from "../../components/FilmsList/FilmsList";
+import s from "./MoviePage.module.css";
 
 function MoviePage() {
-  const { url } = useRouteMatch();
   const history = useHistory();
   const location = useLocation();
   const [movieFound, setMovieFound] = useState([]);
@@ -44,33 +45,28 @@ function MoviePage() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <input name="query" type="text" placeholder="Search movies" />
+      <div className={s.container}>
+        <form className={s.form} onSubmit={handleSubmit}>
+          <input
+            className={s.input}
+            name="query"
+            type="text"
+            placeholder="Search movies"
+          />
 
-        <button type="submit">
-          <span>Search</span>
-        </button>
-      </form>
+          <button className={s.button} type="submit">
+            <span>Search</span>
+          </button>
+        </form>
+      </div>
+
       {status === "pending" && <Spiner />}
 
-      {status === "resolved" && (
-        <ul>
-          {movieFound.map((movie) => (
-            <li key={movie.id}>
-              <Link
-                to={{
-                  pathname: `${url}/${movie.id}`,
-                  state: { from: location },
-                }}
-              >
-                {movie.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      {status === "resolved" && <FilmsList films={movieFound} />}
 
-      {status === "rejected" && <h3>По вашему запросу ничего не найдено</h3>}
+      {status === "rejected" && (
+        <h3 className={s.notFound}>По вашему запросу ничего не найдено</h3>
+      )}
     </div>
   );
 }
